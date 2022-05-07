@@ -29,7 +29,7 @@ function streamify (uri, opt) {
   const video = ytdl(uri, opt)
   const { file, audioFormat } = opt
   const stream = file ? fs.createWriteStream(file) : new PassThrough()
-  const ffmpeg = new FFmpeg(video)
+  const ffmpeg = FFmpeg(video).audioFilters('acompressor=threshold=-30dB:ratio=20:makeup=15')
 
   process.nextTick(() => {
     const output = ffmpeg.format(audioFormat).pipe(stream)
